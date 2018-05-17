@@ -6,6 +6,9 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use App\Excel\Models\Student_Certificate;
 use App\Excel\Models\Student;
 
+/**
+ * ProccessData class
+ */
 
 class ProccessData
 {
@@ -13,6 +16,14 @@ class ProccessData
 
     protected $dataCertificate = array();
     protected $dataStudent = array();
+
+    /**
+     * generateDataCertificate function
+     *
+     * @param IOFactory $reader
+     * @param String $file
+     * @return ProccessData
+     */
 
     function generateDataCertificate($reader, String $file)
     {
@@ -38,6 +49,11 @@ class ProccessData
         return $this;
     }
 
+    /**
+     * saveCertificate function
+     *
+     * @return true
+     */
     function saveCertificate()
     {
         for($i=0; $i<count($this->dataCertificate); $i++) {
@@ -47,7 +63,14 @@ class ProccessData
         return true;
     }
 
-    function generateDataStudent($reader, $file)
+    /**
+     * generateDataStudent function
+     *
+     * @param IOFactory $reader
+     * @param String $file
+     * @return ProccessData
+     */
+    function generateDataStudent($reader, String $file)
     {
         $reader->setReadDataOnly(true);
         $spreadsheet = $reader->load(DOCUMENTS . $file);
@@ -80,17 +103,21 @@ class ProccessData
         return $this;
     }
 
+    /**
+     * saveStudent function
+     *
+     * @return true
+     */
     function saveStudent()
     {
-        for($i=0; $i<count($this->dataStudent); $i++) {
-            $student = Student::updateOrCreate(['usuario' => $this->dataStudent[$i]['usuario']],$this->dataStudent[$i]);
+        for ($i=0; $i<count($this->dataStudent); $i++) {
+            $student = Student::updateOrCreate(['usuario' => $this->dataStudent[$i]['usuario']], $this->dataStudent[$i]);
             $course = Certicifate::select('id')->where("codigo", "=", $this->dataStudent[$i]['curso'])->first();
             Student_Certificate::create(['certificado_id' => $course->id, 'usuario_id' => $student->usuario, "estado" => 0]);
-            if(($i % 20 && $i > 19) == 0) {
-                echo "bloque realizado" .  PHP_EOL;
+            if ($i % 20 == 0 && $i > 19) {
                 sleep(1);
             }
-            echo "usuario : " . $this->dataStudent[$i]['usuario'] . " creado y agregado a tabla de certificado con id:certificado: ". $course->id .  PHP_EOL;
+            echo "Registro #".($i+1)." usuario: " . $this->dataStudent[$i]['usuario'] . " creado y agregado a la tabla de certificado_usuario con id_certificado: ". $course->id .  PHP_EOL;
         }
         return true;
     }

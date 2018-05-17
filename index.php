@@ -22,4 +22,4 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 $processData = new ProccessData;
 //$processData->generateDataCertificate(PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx'), 'cursos.xlsx')->saveCertificate();
-$processData->generateDataStudent(PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx'), 'estudiantes.xlsx')->saveStudent();
+//$processData->generateDataStudent(PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx'), 'estudiantes.xlsx')->saveStudent();
